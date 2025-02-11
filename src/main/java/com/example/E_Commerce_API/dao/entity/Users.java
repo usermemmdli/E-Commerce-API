@@ -1,12 +1,14 @@
-package com.example.E_Commerce_API.entity;
+package com.example.E_Commerce_API.dao.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import jdk.jfr.Enabled;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.sql.Timestamp;
@@ -30,6 +32,7 @@ public class Users implements UserDetails {
     @Email(regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}",
             flags = Pattern.Flag.CASE_INSENSITIVE)
     String email;
+    @Size(min = 6, message = "Password must be at least 6 characters long")
     String password;
     @JoinColumn(name = "role_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
@@ -39,12 +42,7 @@ public class Users implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
-    }
-
-    @Override
-    public String getPassword() {
-        return "";
+        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
     @Override

@@ -1,26 +1,21 @@
-package com.example.E_Commerce_API.entity;
+package com.example.E_Commerce_API.dao.entity;
 
 import jakarta.persistence.*;
 import jdk.jfr.Enabled;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.util.HashSet;
-import java.util.Set;
-
 @Entity
 @Builder
-@Table(name = "roles")
+@Table(name = "categories")
 @Enabled
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Roles {
+public class Categories {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     String name;
-    @OneToMany(mappedBy = "roles")
-    Set<Users> users = new HashSet<>();
 }

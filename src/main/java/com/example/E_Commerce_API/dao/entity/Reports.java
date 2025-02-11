@@ -1,4 +1,4 @@
-package com.example.E_Commerce_API.entity;
+package com.example.E_Commerce_API.dao.entity;
 
 import jakarta.persistence.*;
 import jdk.jfr.Enabled;
@@ -9,13 +9,13 @@ import java.sql.Timestamp;
 
 @Entity
 @Builder
-@Table(name = "bookmarks")
+@Table(name = "reports")
 @Enabled
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Bookmarks {
+public class Reports {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
@@ -25,5 +25,6 @@ public class Bookmarks {
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
     Products products;
+    String description;
     Timestamp createdAt;
 }

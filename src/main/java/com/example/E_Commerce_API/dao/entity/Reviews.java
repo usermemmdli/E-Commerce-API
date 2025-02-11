@@ -1,4 +1,4 @@
-package com.example.E_Commerce_API.entity;
+package com.example.E_Commerce_API.dao.entity;
 
 import jakarta.persistence.*;
 import jdk.jfr.Enabled;
