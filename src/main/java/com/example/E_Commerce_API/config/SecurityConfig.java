@@ -32,7 +32,7 @@ public class SecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
-                        //.requestMatchers("").hasRole("USER")
+                        .requestMatchers("/api/users/edit/**").hasAnyRole("USER", "CUSTOMER")
                         .anyRequest().authenticated())
                 .anonymous(AbstractHttpConfigurer::disable)
                 .authenticationProvider(authenticationProvider())

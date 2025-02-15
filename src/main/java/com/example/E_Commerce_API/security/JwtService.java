@@ -6,6 +6,7 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
@@ -25,13 +26,13 @@ public class JwtService {
                 .claim("roles", users.getAuthorities())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + ACCESS_TOKEN_VALIDITY))
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                .signWith(SignatureAlgorithm.HS256, getSignKey())
                 .compact();
     }
 
-    public static String extractUsername(String token) {
+    public String extractUsername(String token) {
         return Jwts.parser()
-                .setSigningKey(SECRET_KEY)
+                .setSigningKey(getSignKey())
                 .parseClaimsJws(token)
                 .getBody()
                 .getSubject();
@@ -43,23 +44,43 @@ public class JwtService {
                 .claim("roles", users.getAuthorities())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + REFRESH_TOKEN_VALIDITY))
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                .signWith(SignatureAlgorithm.HS256, getSignKey())
                 .compact();
     }
 
-    public static boolean validateToken(String token) {
+    public boolean validateToken(String token) {
+        try {
+            // Sadece token'ı parse edebiliyorsak geçerli kabul et
+            Jwts.parserBuilder()
+                    .setSigningKey(getSignKey())
+                    .build()
+                    .parseClaimsJws(token);
+            return true;  // Eğer exception fırlatılmadıysa token geçerlidir
+        } catch (ExpiredJwtException e) {
+            log.error("Token expired");
+            return false;
+        } catch (JwtException e) {
+            log.error("Invalid token", e);
+            return false;
+        }
+    }
+
+    public boolean isTokenValid(String token, UserDetails userDetails) {
+        final String username = extractUsername(token);
+        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    }
+
+    private boolean isTokenExpired(String token) {
         try {
             return Jwts.parserBuilder()
                     .setSigningKey(getSignKey())
                     .build()
                     .parseClaimsJws(token)
-                    .getBody().isEmpty();
-        } catch (ExpiredJwtException e) {
-            log.error("Token expired");
-            throw e;
-        } catch (JwtException e) {
-            log.error("Invalid token", e);
-            throw e;
+                    .getBody()
+                    .getExpiration()
+                    .before(new Date());
+        } catch (Exception e) {
+            return true;  // Herhangi bir hata durumunda token'ı expired kabul et
         }
     }
 

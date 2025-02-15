@@ -8,7 +8,6 @@ import com.example.E_Commerce_API.dto.request.LoginRequest;
 import com.example.E_Commerce_API.dto.request.SignUpRequest;
 import com.example.E_Commerce_API.dto.response.JwtResponse;
 import com.example.E_Commerce_API.security.JwtService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,8 +15,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.sql.Timestamp;
 import java.time.Instant;
