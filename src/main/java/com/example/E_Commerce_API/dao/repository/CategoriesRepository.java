@@ -6,4 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CategoriesRepository extends JpaRepository<Categories, Long> {
+    boolean existsByName(String name);
+
+    void deleteByName(String name);
 }

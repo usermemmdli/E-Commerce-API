@@ -40,7 +40,8 @@ public class UsersService {
     public UserEditResponse changePassword(String currentUserEmail, UserChangePasswordRequest userChangePasswordRequest) {
         Users users = authenticationHelperService.getAuthenticatedUser(currentUserEmail);
         if (userChangePasswordRequest.getOldPassword() != null &&
-                passwordEncoder.matches(userChangePasswordRequest.getOldPassword(), users.getPassword())) {
+                passwordEncoder.matches(userChangePasswordRequest.getOldPassword(), users.getPassword()))
+        {
             users.setPassword(passwordEncoder.encode(userChangePasswordRequest.getNewPassword()));
         } else {
             throw new RuntimeException("Password does not match");
@@ -51,7 +52,8 @@ public class UsersService {
     public void deleteAccount(String currentUserEmail, UserDeleteAccountRequest userDeleteAccountRequest) {
         Users users = authenticationHelperService.getAuthenticatedUser(currentUserEmail);
         if (userDeleteAccountRequest.getPassword() != null &&
-                passwordEncoder.matches(userDeleteAccountRequest.getPassword(), users.getPassword())) {
+                passwordEncoder.matches(userDeleteAccountRequest.getPassword(), users.getPassword()))
+        {
             usersRepository.delete(users);
         } else {
             throw new RuntimeException("Password does not match");
