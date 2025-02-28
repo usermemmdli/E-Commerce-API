@@ -21,7 +21,7 @@ public class Products {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     String name;
-    BigDecimal price;
+    String price;
     String city;
     String brand;
     String model;
@@ -29,7 +29,7 @@ public class Products {
     Boolean status;
     String description;
     @JoinColumn(name = "category_id", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     Categories categories;
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)

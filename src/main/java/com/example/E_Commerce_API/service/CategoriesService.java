@@ -42,6 +42,8 @@ public class CategoriesService {
         Users users = authenticationHelperService.getAuthenticatedUser(currentUserEmail);
         if (categoriesRequest.getName() != null && categoriesRepository.existsByName(categoriesRequest.getName())) {
             categoriesRepository.deleteByName(categoriesRequest.getName());
+        } else {
+            throw new RuntimeException("Category not found");
         }
     }
 }

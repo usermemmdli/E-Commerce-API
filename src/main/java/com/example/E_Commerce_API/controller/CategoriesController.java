@@ -20,22 +20,23 @@ public class CategoriesController {
     private final AuthenticationHelperService authenticationHelperService;
 
     @GetMapping("/show-all")
-    @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasRole('ADMIN')")
-    public List<CategoriesResponse> getAllCategories() {
+    public ResponseEntity<List<CategoriesResponse>> getAllCategories() {
         String currentUserEmail = authenticationHelperService.getCurrentUserEmail();
-        return categoriesService.getAllCategories(currentUserEmail);
+        List<CategoriesResponse> categoriesResponses = categoriesService.getAllCategories(currentUserEmail);
+        return ResponseEntity.ok(categoriesResponses);
     }
 
     @PostMapping("/add")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<CategoriesResponse> addCategories(@RequestBody CategoriesRequest categoriesRequest ) {
+    public ResponseEntity<CategoriesResponse> addCategories(@RequestBody CategoriesRequest categoriesRequest) {
         String currentUserEmail = authenticationHelperService.getCurrentUserEmail();
         CategoriesResponse addedCategories = categoriesService.addCategories(currentUserEmail, categoriesRequest);
         return ResponseEntity.ok(addedCategories);
     }
 
     @DeleteMapping("/delete")
+    @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasRole('ADMIN')")
     public void deleteCategories(@RequestBody CategoriesRequest categoriesRequest) {
         String currentUserEmail = authenticationHelperService.getCurrentUserEmail();

@@ -21,7 +21,7 @@ public class UsersController {
     private final AuthenticationHelperService authenticationHelperService;
 
     @PatchMapping("/name")
-    @PreAuthorize("hasAnyRole('USER','CUSTOMER')")
+    @PreAuthorize("hasAnyRole('USER','SELLER')")
     public ResponseEntity<UserEditResponse> editUserName(@RequestBody UserEditNameRequest userEditRequest) {
         String currentUserEmail = authenticationHelperService.getCurrentUserEmail();
         UserEditResponse editedName = usersService.editUserName(currentUserEmail, userEditRequest);
@@ -29,7 +29,7 @@ public class UsersController {
     }
 
     @PatchMapping("/number")
-    @PreAuthorize("hasAnyRole('USER','CUSTOMER')")
+    @PreAuthorize("hasAnyRole('USER','SELLER')")
     public ResponseEntity<UserEditResponse> editUserNumber(@RequestBody UserEditNumberRequest userEditNumberRequest) {
         String currentUserEmail = authenticationHelperService.getCurrentUserEmail();
         UserEditResponse editedNumber = usersService.editUserNumber(currentUserEmail, userEditNumberRequest);
@@ -37,7 +37,7 @@ public class UsersController {
     }
 
     @PatchMapping("/change-password")
-    @PreAuthorize("hasAnyRole('USER','CUSTOMER')")
+    @PreAuthorize("hasAnyRole('USER','SELLER')")
     public ResponseEntity<UserEditResponse> changePassword(@RequestBody UserChangePasswordRequest userChangePasswordRequest) {
         String currentUserEmail = authenticationHelperService.getCurrentUserEmail();
         UserEditResponse newPassword = usersService.changePassword(currentUserEmail, userChangePasswordRequest);
@@ -46,7 +46,7 @@ public class UsersController {
 
     @DeleteMapping("/delete-account")
     @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("hasAnyRole('USER','CUSTOMER')")
+    @PreAuthorize("hasAnyRole('USER','SELLER')")
     public void deleteAccount(@RequestBody UserDeleteAccountRequest userDeleteAccountRequest) {
         String currentUserEmail = authenticationHelperService.getCurrentUserEmail();
         usersService.deleteAccount(currentUserEmail, userDeleteAccountRequest);

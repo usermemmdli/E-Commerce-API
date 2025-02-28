@@ -27,4 +27,6 @@ public class Reports {
     Products products;
     String description;
     Timestamp createdAt;
+    Timestamp updatedAt;
+    Boolean status;
 }
