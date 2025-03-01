@@ -7,6 +7,8 @@ import com.example.E_Commerce_API.dto.request.UserDeleteAccountRequest;
 import com.example.E_Commerce_API.dto.request.UserEditNameRequest;
 import com.example.E_Commerce_API.dto.request.UserEditNumberRequest;
 import com.example.E_Commerce_API.dto.response.UserEditResponse;
+import com.example.E_Commerce_API.exception.InvalidPasswordException;
+import com.example.E_Commerce_API.exception.InvalidUserEditRequestException;
 import com.example.E_Commerce_API.mapper.UsersMapper;
 import com.example.E_Commerce_API.security.AuthenticationHelperService;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,8 @@ public class UsersService {
         Users users = authenticationHelperService.getAuthenticatedUser(currentUserEmail);
         if (userEditRequest.getName() != null) {
             users.setName(userEditRequest.getName());
+        } else {
+            throw new InvalidUserEditRequestException("Name cannot be empty");
         }
         Users updatedUsers = usersRepository.save(users);
         return UsersMapper.toUsersEditResponse(updatedUsers);
@@ -33,6 +37,8 @@ public class UsersService {
         Users users = authenticationHelperService.getAuthenticatedUser(currentUserEmail);
         if (userEditNumberRequest.getPhoneNumber() != null) {
             users.setPhoneNumber(userEditNumberRequest.getPhoneNumber());
+        } else {
+            throw new InvalidUserEditRequestException("Phone number cannot be empty");
         }
         return UsersMapper.toUsersEditResponse(usersRepository.save(users));
     }
@@ -40,11 +46,10 @@ public class UsersService {
     public UserEditResponse changePassword(String currentUserEmail, UserChangePasswordRequest userChangePasswordRequest) {
         Users users = authenticationHelperService.getAuthenticatedUser(currentUserEmail);
         if (userChangePasswordRequest.getOldPassword() != null &&
-                passwordEncoder.matches(userChangePasswordRequest.getOldPassword(), users.getPassword()))
-        {
+                passwordEncoder.matches(userChangePasswordRequest.getOldPassword(), users.getPassword())) {
             users.setPassword(passwordEncoder.encode(userChangePasswordRequest.getNewPassword()));
         } else {
-            throw new RuntimeException("Password does not match");
+            throw new InvalidPasswordException("Password does not match");
         }
         return UsersMapper.toUsersEditResponse(usersRepository.save(users));
     }
@@ -52,11 +57,10 @@ public class UsersService {
     public void deleteAccount(String currentUserEmail, UserDeleteAccountRequest userDeleteAccountRequest) {
         Users users = authenticationHelperService.getAuthenticatedUser(currentUserEmail);
         if (userDeleteAccountRequest.getPassword() != null &&
-                passwordEncoder.matches(userDeleteAccountRequest.getPassword(), users.getPassword()))
-        {
+                passwordEncoder.matches(userDeleteAccountRequest.getPassword(), users.getPassword())) {
             usersRepository.delete(users);
         } else {
-            throw new RuntimeException("Password does not match");
+            throw new InvalidPasswordException("Password does not match");
         }
     }
 }

@@ -5,6 +5,7 @@ import com.example.E_Commerce_API.dao.entity.Users;
 import com.example.E_Commerce_API.dao.repository.CategoriesRepository;
 import com.example.E_Commerce_API.dto.request.CategoriesRequest;
 import com.example.E_Commerce_API.dto.response.CategoriesResponse;
+import com.example.E_Commerce_API.exception.CategoryNotFoundException;
 import com.example.E_Commerce_API.mapper.CategoriesMapper;
 import com.example.E_Commerce_API.security.AuthenticationHelperService;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +44,7 @@ public class CategoriesService {
         if (categoriesRequest.getName() != null && categoriesRepository.existsByName(categoriesRequest.getName())) {
             categoriesRepository.deleteByName(categoriesRequest.getName());
         } else {
-            throw new RuntimeException("Category not found");
+            throw new CategoryNotFoundException("Category not found");
         }
     }
 }

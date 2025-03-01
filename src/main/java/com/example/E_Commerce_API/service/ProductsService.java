@@ -7,6 +7,8 @@ import com.example.E_Commerce_API.dto.request.ProductsEditRequest;
 import com.example.E_Commerce_API.dto.response.ProductsEditResponse;
 import com.example.E_Commerce_API.dto.response.ProductsPageResponse;
 import com.example.E_Commerce_API.dto.response.ProductsResponse;
+import com.example.E_Commerce_API.exception.ProductsNotFoundException;
+import com.example.E_Commerce_API.exception.RoleNotFoundException;
 import com.example.E_Commerce_API.mapper.ProductsMapper;
 import com.example.E_Commerce_API.security.AuthenticationHelperService;
 import lombok.RequiredArgsConstructor;
@@ -66,7 +68,7 @@ public class ProductsService {
     public void newProduct(String currentUserEmail, NewProductsRequest newProductsRequest) {
         Users users = authenticationHelperService.getAuthenticatedUser(currentUserEmail);
         Roles roles = rolesRepository.findByName("CUSTOMER")
-                .orElseThrow(() -> new RuntimeException("No roles found"));
+                .orElseThrow(() -> new RoleNotFoundException("No roles found"));
         users.setRoles(roles);
         Categories categories = categoriesRepository.findByName(newProductsRequest.getCategoriesName());
 
@@ -92,7 +94,7 @@ public class ProductsService {
         Bookmarks bookmarks = new Bookmarks();
         bookmarks.setUsers(users);
         bookmarks.setProducts(productsRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("No products found")));
+                .orElseThrow(() -> new ProductsNotFoundException("Product not found")));
         bookmarks.setCreatedAt(Timestamp.from(Instant.now()));
         bookmarksRepository.save(bookmarks);
     }
@@ -102,7 +104,7 @@ public class ProductsService {
         Categories categories = categoriesRepository.findByName(productsEditRequest.getCategoriesName());
 
         Products products = productsRepository.findById(productsEditRequest.getId())
-                .orElseThrow(() -> new RuntimeException("No products found"));
+                .orElseThrow(() -> new ProductsNotFoundException("Product not found"));
         products.setName(productsEditRequest.getName());
         products.setPrice(productsEditRequest.getPrice());
         products.setCity(productsEditRequest.getCity());
@@ -122,7 +124,7 @@ public class ProductsService {
         if (productsRepository.existsById(users.getId()) && productsRepository.existsById(id)) {
             productsRepository.deleteById(id);
         } else {
-            throw new RuntimeException("Product not found");
+            throw new ProductsNotFoundException("Product not found");
         }
     }
 }

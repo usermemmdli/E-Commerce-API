@@ -7,6 +7,9 @@ import com.example.E_Commerce_API.dao.repository.UsersRepository;
 import com.example.E_Commerce_API.dto.request.LoginRequest;
 import com.example.E_Commerce_API.dto.request.SignUpRequest;
 import com.example.E_Commerce_API.dto.response.JwtResponse;
+import com.example.E_Commerce_API.exception.EmailAlreadyIsTakenException;
+import com.example.E_Commerce_API.exception.InvalidEmailOrPasswordException;
+import com.example.E_Commerce_API.exception.RoleNotFoundException;
 import com.example.E_Commerce_API.security.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -30,12 +33,12 @@ public class AuthService {
 
     public void signUpUser(SignUpRequest signUpRequest) {
         if (usersRepository.existsByEmail(signUpRequest.getEmail())) {
-            throw new RuntimeException("Email is already taken");
+            throw new EmailAlreadyIsTakenException("Email is already taken");
         }
         Users users = new Users();
 
         Roles defaultRole = rolesRepository.findByName("USER")
-                .orElseThrow(() -> new RuntimeException("No roles found"));
+                .orElseThrow(() -> new RoleNotFoundException("No roles found"));
 
         users.setRoles(defaultRole);
         users.setName(signUpRequest.getName());
@@ -56,7 +59,7 @@ public class AuthService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         Users users = usersRepository.findByEmail(loginRequest.getEmail())
-                .orElseThrow(() -> new RuntimeException("Email or password is invalid"));
+                .orElseThrow(() -> new InvalidEmailOrPasswordException("Email or password is invalid"));
         String accessToken = JwtService.createAccessToken(users);
         String refreshToken = jwtService.createRefreshToken(users);
 

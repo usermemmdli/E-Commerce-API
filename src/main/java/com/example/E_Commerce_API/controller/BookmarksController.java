@@ -28,7 +28,7 @@ public class BookmarksController {
     @DeleteMapping
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasAnyRole('USER','SELLER')")
-    public void deleteProductsMark(Long productId) {
+    public void deleteProductsMark(@RequestParam Long productId) {
         String currentUserEmail = authenticationHelperService.getCurrentUserEmail();
         bookmarksService.deleteProductsMark(currentUserEmail, productId);
     }

@@ -5,6 +5,7 @@ import com.example.E_Commerce_API.dao.entity.Users;
 import com.example.E_Commerce_API.dao.repository.BookmarksRepository;
 import com.example.E_Commerce_API.dto.response.BookmarksPageResponse;
 import com.example.E_Commerce_API.dto.response.ProductsResponse;
+import com.example.E_Commerce_API.exception.BookmarksNotFoundException;
 import com.example.E_Commerce_API.mapper.ProductsMapper;
 import com.example.E_Commerce_API.security.AuthenticationHelperService;
 import lombok.RequiredArgsConstructor;
@@ -47,7 +48,7 @@ public class BookmarksService {
         if (bookmarksRepository.existsById(productId) && bookmarksRepository.existsById(users.getId())) {
             bookmarksRepository.deleteById(productId);
         } else {
-            throw new RuntimeException("Bookmark not found");
+            throw new BookmarksNotFoundException("Bookmark not found");
         }
     }
 }

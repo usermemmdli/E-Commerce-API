@@ -1,5 +1,6 @@
 package com.example.E_Commerce_API.service;
 
+import com.example.E_Commerce_API.dao.entity.Products;
 import com.example.E_Commerce_API.dao.entity.Reviews;
 import com.example.E_Commerce_API.dao.entity.Users;
 import com.example.E_Commerce_API.dao.repository.ProductsRepository;
@@ -7,12 +8,14 @@ import com.example.E_Commerce_API.dao.repository.ReviewsRepository;
 import com.example.E_Commerce_API.dto.request.ReviewsRequest;
 import com.example.E_Commerce_API.dto.response.ReviewsPageResponse;
 import com.example.E_Commerce_API.dto.response.ReviewsResponse;
+import com.example.E_Commerce_API.exception.ProductsNotFoundException;
 import com.example.E_Commerce_API.mapper.ReviewsMapper;
 import com.example.E_Commerce_API.security.AuthenticationHelperService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -20,6 +23,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class ReviewsService {
     private final ReviewsRepository reviewsRepository;
@@ -38,8 +42,10 @@ public class ReviewsService {
         Users users = authenticationHelperService.getAuthenticatedUser(currentUserEmail);
         Reviews reviews = new Reviews();
         reviews.setUsers(users);
-        if (reviewsRequest.getProductId() != null && productsRepository.findById(reviewsRequest.getProductId()).isPresent()) {
-            reviews.setProducts(productsRepository.findById(reviewsRequest.getProductId()).orElseThrow(() -> new RuntimeException("Product not found")));
+        if (reviewsRequest.getProductId() != null) {
+            Products product = productsRepository.findById(reviewsRequest.getProductId())
+                    .orElseThrow(() -> new ProductsNotFoundException("Product not found"));
+            reviews.setProducts(product);
         }
         reviews.setDescription(reviewsRequest.getDescription());
         reviews.setRating(reviewsRequest.getRating());
