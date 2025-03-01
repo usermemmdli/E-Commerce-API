@@ -20,10 +20,10 @@ public class Reports {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     Users users;
     @JoinColumn(name = "product_id", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     Products products;
     String description;
     Timestamp createdAt;

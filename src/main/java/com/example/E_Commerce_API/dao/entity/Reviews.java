@@ -9,20 +9,21 @@ import java.sql.Timestamp;
 
 @Entity
 @Builder
-@Table(name = "reports")
+@Table(name = "reviews")
 @Enabled
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Reviews {@Id
-@GeneratedValue(strategy = GenerationType.IDENTITY)
-Long id;
+public class Reviews {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long id;
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     Users users;
     @JoinColumn(name = "product_id", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     Products products;
     Integer rating;
     String description;

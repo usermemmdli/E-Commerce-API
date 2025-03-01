@@ -13,7 +13,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.sql.Timestamp;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Builder
@@ -37,6 +39,10 @@ public class Users implements UserDetails {
     @JoinColumn(name = "role_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
     Roles roles;
+    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
+    private Set<Reviews> reviews = new HashSet<>();
+    @OneToMany(mappedBy = "users", fetch = FetchType.EAGER)
+    private List<Reports> reports;
     Timestamp createdAt;
     Timestamp updatedAt;
 
