@@ -60,7 +60,7 @@ public class AuthService {
 
         Users users = usersRepository.findByEmail(loginRequest.getEmail())
                 .orElseThrow(() -> new InvalidEmailOrPasswordException("Email or password is invalid"));
-        String accessToken = JwtService.createAccessToken(users);
+        String accessToken = jwtService.createAccessToken(users);
         String refreshToken = jwtService.createRefreshToken(users);
 
         return new JwtResponse(accessToken, refreshToken);

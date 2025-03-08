@@ -4,24 +4,22 @@ import jakarta.persistence.*;
 import jdk.jfr.Enabled;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
-@Entity
 @Builder
-@Table(name = "products")
 @Enabled
 @Data
+@Document(collection = "products")
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Products {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    String id;
     String name;
     String price;
     String city;
@@ -30,15 +28,11 @@ public class Products {
     Boolean delivery;
     Boolean status;
     String description;
-    @JoinColumn(name = "category_id", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.EAGER)
-    Categories categories;
-    @OneToMany(mappedBy = "products", cascade = CascadeType.ALL)
-    private Set<Reviews> reviews = new HashSet<>();
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.EAGER)
-    Users users;
-    Timestamp createdAt;
-    Timestamp updatedAt;
+    String categoriesName;
+    List<String> reviewsId = new ArrayList<>();
+    List<String> reportsId = new ArrayList<>();
+    Long usersId;
+    Date createdAt;
+    Date updatedAt;
     String imageUrl;
 }

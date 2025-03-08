@@ -3,7 +3,7 @@ package com.example.E_Commerce_API.controller;
 import com.example.E_Commerce_API.dto.request.NewProductsRequest;
 import com.example.E_Commerce_API.dto.request.ProductsEditRequest;
 import com.example.E_Commerce_API.dto.response.ProductsEditResponse;
-import com.example.E_Commerce_API.dto.response.ProductsPageResponse;
+import com.example.E_Commerce_API.dto.response.pagination.ProductsPageResponse;
 import com.example.E_Commerce_API.security.AuthenticationHelperService;
 import com.example.E_Commerce_API.service.ProductsService;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ public class ProductsController {
     private final ProductsService productsService;
     private final AuthenticationHelperService authenticationHelperService;
 
-    @GetMapping("/products")
+    @GetMapping("/all")
     @PreAuthorize("hasAnyRole('USER','ADMIN','SELLER')")
     public ResponseEntity<ProductsPageResponse> getAllProducts(@RequestParam(value = "page") int page,
                                                                @RequestParam(value = "count") int count) {
@@ -28,7 +28,7 @@ public class ProductsController {
         return ResponseEntity.ok(productsPageResponses);
     }
 
-    @GetMapping("/products-by-categories")
+    @GetMapping("/by-categories")
     @PreAuthorize("hasAnyRole('USER','ADMIN','SELLER')")
     public ResponseEntity<ProductsPageResponse> getAllProductsByCategory(@RequestParam(value = "name") String categoriesName,
                                                                          @RequestParam(value = "page") int page,
@@ -46,10 +46,10 @@ public class ProductsController {
         productsService.newProduct(currentUserEmail, newProductsRequest);
     }
 
-    @PostMapping
+    @PostMapping("/{id}")
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAnyRole('USER', 'SELLER')")
-    public void addProductsToBookmarks(@RequestParam Long id) {
+    public void addProductsToBookmarks(@PathVariable String id) {
         String currentUserEmail = authenticationHelperService.getCurrentUserEmail();
         productsService.addProductsToBookmarks(currentUserEmail, id);
     }
@@ -62,10 +62,10 @@ public class ProductsController {
         return ResponseEntity.ok(editProduct);
     }
 
-    @DeleteMapping("/delete")
-    @ResponseStatus(HttpStatus.OK)
+    @DeleteMapping("/delete/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasRole('SELLER')")
-    public void deleteProduct(@RequestBody Long id) {
+    public void deleteProduct(@PathVariable String id) {
         String currentUserEmail = authenticationHelperService.getCurrentUserEmail();
         productsService.deleteProduct(currentUserEmail, id);
     }

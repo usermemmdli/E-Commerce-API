@@ -13,6 +13,4 @@ public class CategoriesMapper {
                 .name(categories.getName())
                 .build();
     }
-
-
 }

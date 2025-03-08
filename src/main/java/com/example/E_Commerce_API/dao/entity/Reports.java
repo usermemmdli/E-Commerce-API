@@ -4,12 +4,12 @@ import jakarta.persistence.*;
 import jdk.jfr.Enabled;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.sql.Timestamp;
 
-@Entity
 @Builder
-@Table(name = "reports")
+@Document(collection = "reports")
 @Enabled
 @Data
 @NoArgsConstructor
@@ -17,14 +17,9 @@ import java.sql.Timestamp;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Reports {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.EAGER)
-    Users users;
-    @JoinColumn(name = "product_id", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.EAGER)
-    Products products;
+    String id;
+    Long usersId;
+    String productsId;
     String description;
     Timestamp createdAt;
     Timestamp updatedAt;

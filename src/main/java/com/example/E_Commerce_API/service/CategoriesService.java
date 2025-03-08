@@ -29,7 +29,6 @@ public class CategoriesService {
                 .collect(Collectors.toList());
     }
 
-
     public CategoriesResponse addCategories(String currentUserEmail, CategoriesRequest categoriesRequest) {
         Users users = authenticationHelperService.getAuthenticatedUser(currentUserEmail);
         Categories categories = new Categories();
@@ -39,10 +38,10 @@ public class CategoriesService {
         return CategoriesMapper.toCategoriesResponse(categoriesRepository.save(categories));
     }
 
-    public void deleteCategories(String currentUserEmail, CategoriesRequest categoriesRequest) {
+    public void deleteCategories(String currentUserEmail, String name) {
         Users users = authenticationHelperService.getAuthenticatedUser(currentUserEmail);
-        if (categoriesRequest.getName() != null && categoriesRepository.existsByName(categoriesRequest.getName())) {
-            categoriesRepository.deleteByName(categoriesRequest.getName());
+        if (name != null && categoriesRepository.existsByName(name)) {
+            categoriesRepository.deleteByName(name);
         } else {
             throw new CategoryNotFoundException("Category not found");
         }

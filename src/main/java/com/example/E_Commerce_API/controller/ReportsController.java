@@ -2,7 +2,7 @@ package com.example.E_Commerce_API.controller;
 
 import com.example.E_Commerce_API.dto.request.ReportsRequest;
 import com.example.E_Commerce_API.dto.request.ReportsStatusRequest;
-import com.example.E_Commerce_API.dto.response.ReportsPageResponse;
+import com.example.E_Commerce_API.dto.response.pagination.ReportsPageResponse;
 import com.example.E_Commerce_API.dto.response.ReportsStatusResponse;
 import com.example.E_Commerce_API.security.AuthenticationHelperService;
 import com.example.E_Commerce_API.service.ReportsService;
@@ -38,15 +38,16 @@ public class ReportsController {
 
     @PatchMapping("/set-status")
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<ReportsStatusResponse> setStatusReport(@RequestBody ReportsStatusRequest reportsStatusRequest, Long id) {
+    public ResponseEntity<ReportsStatusResponse> setStatusReport(@RequestBody ReportsStatusRequest reportsStatusRequest) {
         String currentUserEmail = authenticationHelperService.getCurrentUserEmail();
-        ReportsStatusResponse reportsStatusResponse = reportsService.setStatusReport(currentUserEmail, id, reportsStatusRequest);
+        ReportsStatusResponse reportsStatusResponse = reportsService.setStatusReport(currentUserEmail, reportsStatusRequest);
         return ResponseEntity.ok(reportsStatusResponse);
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("/delete/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public void deleteReport(@RequestBody Long id) {
+    public void deleteReport(@PathVariable String id) {
         String currentUserEmail = authenticationHelperService.getCurrentUserEmail();
         reportsService.deleteReport(currentUserEmail, id);
     }

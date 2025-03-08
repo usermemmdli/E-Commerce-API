@@ -19,8 +19,8 @@ public class ReportsMapper {
     public ReportsResponse toReportsResponse(Reports reports) {
         return ReportsResponse.builder()
                 .id(reports.getId())
-                .userId(reports.getUsers().getId())
-                .productId(reports.getProducts().getId())
+                .userId(reports.getUsersId())
+                .productId(reports.getProductsId())
                 .description(reports.getDescription())
                 .status(reports.getStatus())
                 .createdAt(reports.getCreatedAt())

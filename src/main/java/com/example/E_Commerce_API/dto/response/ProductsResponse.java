@@ -3,12 +3,12 @@ package com.example.E_Commerce_API.dto.response;
 import lombok.Builder;
 import lombok.Data;
 
-import java.sql.Timestamp;
+import java.util.Date;
 
 @Data
 @Builder
 public class ProductsResponse {
-    private Long id;
+    private String id;
     private String name;
     private String price;
     private String city;
@@ -18,6 +18,7 @@ public class ProductsResponse {
     private Boolean status;
     private String description;
     private String categoriesName;
-    private Timestamp updatedAt;
+    private Date createdAt;
+    private Date updatedAt;
     private String imageUrl;
 }

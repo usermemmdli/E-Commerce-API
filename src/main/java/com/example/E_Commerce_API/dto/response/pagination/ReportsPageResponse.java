@@ -1,4 +1,6 @@
-package com.example.E_Commerce_API.dto.response;
+package com.example.E_Commerce_API.dto.response.pagination;
+
+import com.example.E_Commerce_API.dto.response.ReportsResponse;
 
 import java.util.List;
 

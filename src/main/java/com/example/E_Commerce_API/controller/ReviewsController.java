@@ -1,7 +1,7 @@
 package com.example.E_Commerce_API.controller;
 
 import com.example.E_Commerce_API.dto.request.ReviewsRequest;
-import com.example.E_Commerce_API.dto.response.ReviewsPageResponse;
+import com.example.E_Commerce_API.dto.response.pagination.ReviewsPageResponse;
 import com.example.E_Commerce_API.security.AuthenticationHelperService;
 import com.example.E_Commerce_API.service.ReviewsService;
 import lombok.RequiredArgsConstructor;

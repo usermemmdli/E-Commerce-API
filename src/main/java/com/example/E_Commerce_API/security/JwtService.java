@@ -20,7 +20,7 @@ public class JwtService {
     private static final long ACCESS_TOKEN_VALIDITY = 15 * 60 * 1000;
     private static final long REFRESH_TOKEN_VALIDITY = 7 * 24 * 60 * 60 * 1000;
 
-    public static String createAccessToken(Users users) {
+    public String createAccessToken(Users users) {
         return Jwts.builder()
                 .setSubject(users.getEmail())
                 .claim("roles", users.getAuthorities())

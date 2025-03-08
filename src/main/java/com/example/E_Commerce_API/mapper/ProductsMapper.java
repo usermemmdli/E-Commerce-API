@@ -6,9 +6,6 @@ import com.example.E_Commerce_API.dto.response.ProductsResponse;
 import org.mapstruct.Mapper;
 import org.springframework.stereotype.Component;
 
-import java.sql.Timestamp;
-import java.time.Instant;
-
 @Component
 @Mapper(componentModel = "spring")
 public class ProductsMapper {
@@ -22,8 +19,8 @@ public class ProductsMapper {
                 .delivery(products.getDelivery())
                 .status(products.getStatus())
                 .description(products.getDescription())
-                .categoriesName(products.getCategories().getName())
-                .updatedAt(Timestamp.from(Instant.now()))
+                .categoriesName(products.getCategoriesName())
+                .updatedAt(products.getUpdatedAt())
                 .imageUrl(products.getImageUrl())
                 .build();
     }
@@ -39,8 +36,9 @@ public class ProductsMapper {
                 .delivery(products.getDelivery())
                 .status(products.getStatus())
                 .description(products.getDescription())
-                .categoriesName(products.getCategories().getName())
-                .updatedAt(Timestamp.from(Instant.now()))
+                .categoriesName(products.getCategoriesName())
+                .createdAt(products.getCreatedAt())
+                .updatedAt(products.getUpdatedAt())
                 .imageUrl(products.getImageUrl())
                 .build();
     }

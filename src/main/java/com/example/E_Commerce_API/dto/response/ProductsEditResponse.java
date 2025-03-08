@@ -3,8 +3,7 @@ package com.example.E_Commerce_API.dto.response;
 import lombok.Builder;
 import lombok.Data;
 
-import java.math.BigDecimal;
-import java.sql.Timestamp;
+import java.util.Date;
 
 @Data
 @Builder
@@ -18,6 +17,6 @@ public class ProductsEditResponse {
     private Boolean status;
     private String description;
     private String categoriesName;
-    private Timestamp updatedAt;
+    private Date updatedAt;
     private String imageUrl;
 }

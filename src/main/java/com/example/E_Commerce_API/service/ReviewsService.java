@@ -6,7 +6,7 @@ import com.example.E_Commerce_API.dao.entity.Users;
 import com.example.E_Commerce_API.dao.repository.ProductsRepository;
 import com.example.E_Commerce_API.dao.repository.ReviewsRepository;
 import com.example.E_Commerce_API.dto.request.ReviewsRequest;
-import com.example.E_Commerce_API.dto.response.ReviewsPageResponse;
+import com.example.E_Commerce_API.dto.response.pagination.ReviewsPageResponse;
 import com.example.E_Commerce_API.dto.response.ReviewsResponse;
 import com.example.E_Commerce_API.exception.ProductsNotFoundException;
 import com.example.E_Commerce_API.mapper.ReviewsMapper;
@@ -41,11 +41,11 @@ public class ReviewsService {
     public void addReview(String currentUserEmail, ReviewsRequest reviewsRequest) {
         Users users = authenticationHelperService.getAuthenticatedUser(currentUserEmail);
         Reviews reviews = new Reviews();
-        reviews.setUsers(users);
+        reviews.setUsersId(users.getId());
         if (reviewsRequest.getProductId() != null) {
             Products product = productsRepository.findById(reviewsRequest.getProductId())
                     .orElseThrow(() -> new ProductsNotFoundException("Product not found"));
-            reviews.setProducts(product);
+            reviews.setProductsId(product.getId());
         }
         reviews.setDescription(reviewsRequest.getDescription());
         reviews.setRating(reviewsRequest.getRating());

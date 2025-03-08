@@ -35,11 +35,11 @@ public class CategoriesController {
         return ResponseEntity.ok(addedCategories);
     }
 
-    @DeleteMapping("/delete")
-    @ResponseStatus(HttpStatus.OK)
+    @DeleteMapping("/delete/{name}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasRole('ADMIN')")
-    public void deleteCategories(@RequestBody CategoriesRequest categoriesRequest) {
+    public void deleteCategories(@PathVariable String name) {
         String currentUserEmail = authenticationHelperService.getCurrentUserEmail();
-        categoriesService.deleteCategories(currentUserEmail, categoriesRequest);
+        categoriesService.deleteCategories(currentUserEmail, name);
     }
 }

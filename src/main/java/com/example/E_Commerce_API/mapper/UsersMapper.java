@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Mapper(componentModel = "spring")
 public class UsersMapper {
-    public static UserEditResponse toUsersEditResponse(Users users) {
+    public UserEditResponse toUsersEditResponse(Users users) {
         return UserEditResponse.builder()
                 .name(users.getName())
                 .phoneNumber(users.getPhoneNumber())

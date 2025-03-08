@@ -2,8 +2,6 @@ package com.example.E_Commerce_API.controller;
 
 import com.example.E_Commerce_API.dto.request.UserChangePasswordRequest;
 import com.example.E_Commerce_API.dto.request.UserDeleteAccountRequest;
-import com.example.E_Commerce_API.dto.request.UserEditNameRequest;
-import com.example.E_Commerce_API.dto.request.UserEditNumberRequest;
 import com.example.E_Commerce_API.dto.response.UserEditResponse;
 import com.example.E_Commerce_API.security.AuthenticationHelperService;
 import com.example.E_Commerce_API.service.UsersService;
@@ -22,17 +20,17 @@ public class UsersController {
 
     @PatchMapping("/name")
     @PreAuthorize("hasAnyRole('USER','SELLER')")
-    public ResponseEntity<UserEditResponse> editUserName(@RequestBody UserEditNameRequest userEditRequest) {
+    public ResponseEntity<UserEditResponse> editUserName(@RequestParam String name) {
         String currentUserEmail = authenticationHelperService.getCurrentUserEmail();
-        UserEditResponse editedName = usersService.editUserName(currentUserEmail, userEditRequest);
+        UserEditResponse editedName = usersService.editUserName(currentUserEmail, name);
         return ResponseEntity.ok(editedName);
     }
 
     @PatchMapping("/number")
     @PreAuthorize("hasAnyRole('USER','SELLER')")
-    public ResponseEntity<UserEditResponse> editUserNumber(@RequestBody UserEditNumberRequest userEditNumberRequest) {
+    public ResponseEntity<UserEditResponse> editUserNumber(@RequestParam String number) {
         String currentUserEmail = authenticationHelperService.getCurrentUserEmail();
-        UserEditResponse editedNumber = usersService.editUserNumber(currentUserEmail, userEditNumberRequest);
+        UserEditResponse editedNumber = usersService.editUserNumber(currentUserEmail, number);
         return ResponseEntity.ok(editedNumber);
     }
 
@@ -45,7 +43,7 @@ public class UsersController {
     }
 
     @DeleteMapping("/delete-account")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAnyRole('USER','SELLER')")
     public void deleteAccount(@RequestBody UserDeleteAccountRequest userDeleteAccountRequest) {
         String currentUserEmail = authenticationHelperService.getCurrentUserEmail();

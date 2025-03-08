@@ -7,7 +7,7 @@ import com.example.E_Commerce_API.dao.repository.ProductsRepository;
 import com.example.E_Commerce_API.dao.repository.ReportsRepository;
 import com.example.E_Commerce_API.dto.request.ReportsRequest;
 import com.example.E_Commerce_API.dto.request.ReportsStatusRequest;
-import com.example.E_Commerce_API.dto.response.ReportsPageResponse;
+import com.example.E_Commerce_API.dto.response.pagination.ReportsPageResponse;
 import com.example.E_Commerce_API.dto.response.ReportsResponse;
 import com.example.E_Commerce_API.dto.response.ReportsStatusResponse;
 import com.example.E_Commerce_API.exception.ProductsNotFoundException;
@@ -37,11 +37,11 @@ public class ReportsService {
     public void newReport(String currentUserEmail, ReportsRequest reportsRequest) {
         Users users = authenticationHelperService.getAuthenticatedUser(currentUserEmail);
         Reports reports = new Reports();
-        reports.setUsers(users);
+        reports.setUsersId(users.getId());
         if (reportsRequest.getProductId() != null) {
             Products product = productsRepository.findById(reportsRequest.getProductId())
                     .orElseThrow(() -> new ProductsNotFoundException("Product not found"));
-            reports.setProducts(product);
+            reports.setProductsId(product.getId());
         }
         reports.setStatus(false);
         reports.setDescription(reportsRequest.getDescription());
@@ -64,9 +64,9 @@ public class ReportsService {
         );
     }
 
-    public ReportsStatusResponse setStatusReport(String currentUserEmail, Long id, ReportsStatusRequest reportsStatusRequest) {
+    public ReportsStatusResponse setStatusReport(String currentUserEmail, ReportsStatusRequest reportsStatusRequest) {
         Users users = authenticationHelperService.getAuthenticatedUser(currentUserEmail);
-        Reports reports = reportsRepository.findById(id)
+        Reports reports = reportsRepository.findById(reportsStatusRequest.getId())
                 .orElseThrow(() -> new ReportsNotFoundException("Report not found"));
         reports.setStatus(reportsStatusRequest.getStatus());
         reports.setUpdatedAt(Timestamp.from(Instant.now()));
@@ -74,7 +74,7 @@ public class ReportsService {
         return reportsMapper.toReportsStatusResponse(reports);
     }
 
-    public void deleteReport(String currentUserEmail, Long id) {
+    public void deleteReport(String currentUserEmail, String id) {
         Users users = authenticationHelperService.getAuthenticatedUser(currentUserEmail);
         if (reportsRepository.findById(id).isPresent()) {
             reportsRepository.deleteById(id);

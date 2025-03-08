@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 public class ReviewsRequest {
-    private Long productId;
+    private String productId;
     private Integer rating;
     private String description;
 }

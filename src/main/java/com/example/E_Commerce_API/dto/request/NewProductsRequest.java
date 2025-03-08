@@ -2,9 +2,6 @@ package com.example.E_Commerce_API.dto.request;
 
 import lombok.Data;
 
-import java.math.BigDecimal;
-import java.sql.Timestamp;
-
 @Data
 public class NewProductsRequest {
     private String name;
@@ -16,6 +13,5 @@ public class NewProductsRequest {
     private Boolean status;
     private String description;
     private String categoriesName;
-    private Timestamp createdAt;
     private String imageUrl;
 }
