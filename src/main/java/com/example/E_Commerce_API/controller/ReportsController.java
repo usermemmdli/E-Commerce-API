@@ -6,6 +6,7 @@ import com.example.E_Commerce_API.dto.response.pagination.ReportsPageResponse;
 import com.example.E_Commerce_API.dto.response.ReportsStatusResponse;
 import com.example.E_Commerce_API.security.AuthenticationHelperService;
 import com.example.E_Commerce_API.service.ReportsService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ public class ReportsController {
     @PostMapping("/new")
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAnyRole('USER', 'SELLER')")
-    public void newReport(@RequestBody ReportsRequest reportsRequest) {
+    public void newReport(@RequestBody @Valid ReportsRequest reportsRequest) {
         String currentUserEmail = authenticationHelperService.getCurrentUserEmail();
         reportsService.newReport(currentUserEmail, reportsRequest);
     }
@@ -38,7 +39,7 @@ public class ReportsController {
 
     @PatchMapping("/set-status")
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<ReportsStatusResponse> setStatusReport(@RequestBody ReportsStatusRequest reportsStatusRequest) {
+    public ResponseEntity<ReportsStatusResponse> setStatusReport(@RequestBody @Valid ReportsStatusRequest reportsStatusRequest) {
         String currentUserEmail = authenticationHelperService.getCurrentUserEmail();
         ReportsStatusResponse reportsStatusResponse = reportsService.setStatusReport(currentUserEmail, reportsStatusRequest);
         return ResponseEntity.ok(reportsStatusResponse);

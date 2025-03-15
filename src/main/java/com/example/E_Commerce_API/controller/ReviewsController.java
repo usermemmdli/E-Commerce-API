@@ -4,6 +4,7 @@ import com.example.E_Commerce_API.dto.request.ReviewsRequest;
 import com.example.E_Commerce_API.dto.response.pagination.ReviewsPageResponse;
 import com.example.E_Commerce_API.security.AuthenticationHelperService;
 import com.example.E_Commerce_API.service.ReviewsService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class ReviewsController {
     private final AuthenticationHelperService authenticationHelperService;
 
     @GetMapping("/show")
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER','SELLER')")
+    @PreAuthorize("hasAnyRole('ADMIN','USER','SELLER')")
     public ResponseEntity<ReviewsPageResponse> showReviews(@RequestParam(value = "page", defaultValue = "0") int page,
                                                            @RequestParam(value = "count", defaultValue = "5") int count) {
         String currentUserEmail = authenticationHelperService.getCurrentUserEmail();
@@ -29,7 +30,7 @@ public class ReviewsController {
     @PostMapping("/new")
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAnyRole('USER','SELLER')")
-    public void addReview(@RequestBody ReviewsRequest reviewsRequest) {
+    public void addReview(@RequestBody @Valid ReviewsRequest reviewsRequest) {
         String currentUserEmail = authenticationHelperService.getCurrentUserEmail();
         reviewsService.addReview(currentUserEmail, reviewsRequest);
     }

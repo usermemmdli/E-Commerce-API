@@ -6,6 +6,7 @@ import com.example.E_Commerce_API.dto.response.ProductsEditResponse;
 import com.example.E_Commerce_API.dto.response.pagination.ProductsPageResponse;
 import com.example.E_Commerce_API.security.AuthenticationHelperService;
 import com.example.E_Commerce_API.service.ProductsService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,7 +42,7 @@ public class ProductsController {
     @PostMapping("/new")
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAnyRole('USER', 'SELLER')")
-    public void newProduct(@RequestBody NewProductsRequest newProductsRequest) {
+    public void newProduct(@RequestBody @Valid NewProductsRequest newProductsRequest) {
         String currentUserEmail = authenticationHelperService.getCurrentUserEmail();
         productsService.newProduct(currentUserEmail, newProductsRequest);
     }
@@ -56,7 +57,7 @@ public class ProductsController {
 
     @PutMapping("/edit")
     @PreAuthorize("hasRole('SELLER')")
-    public ResponseEntity<ProductsEditResponse> editProduct(@RequestBody ProductsEditRequest productsEditRequest) {
+    public ResponseEntity<ProductsEditResponse> editProduct(@RequestBody @Valid ProductsEditRequest productsEditRequest) {
         String currentUserEmail = authenticationHelperService.getCurrentUserEmail();
         ProductsEditResponse editProduct = productsService.editProduct(currentUserEmail, productsEditRequest);
         return ResponseEntity.ok(editProduct);

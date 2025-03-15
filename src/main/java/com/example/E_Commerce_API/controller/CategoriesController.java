@@ -4,6 +4,7 @@ import com.example.E_Commerce_API.dto.request.CategoriesRequest;
 import com.example.E_Commerce_API.dto.response.CategoriesResponse;
 import com.example.E_Commerce_API.security.AuthenticationHelperService;
 import com.example.E_Commerce_API.service.CategoriesService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +30,7 @@ public class CategoriesController {
 
     @PostMapping("/add")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<CategoriesResponse> addCategories(@RequestBody CategoriesRequest categoriesRequest) {
+    public ResponseEntity<CategoriesResponse> addCategories(@RequestBody @Valid CategoriesRequest categoriesRequest) {
         String currentUserEmail = authenticationHelperService.getCurrentUserEmail();
         CategoriesResponse addedCategories = categoriesService.addCategories(currentUserEmail, categoriesRequest);
         return ResponseEntity.ok(addedCategories);
