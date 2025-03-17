@@ -42,7 +42,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/users/edit/**").hasAnyRole("USER", "SELLER")
                         .requestMatchers("/api/reviews/**").hasAnyRole("USER", "SELLER")
                         .requestMatchers("/api/bookmarks/**").hasAnyRole("USER", "SELLER")
-                        .requestMatchers("/api/categories/**").hasAnyRole("ADMIN")
+                        .requestMatchers("/api/categories/**").hasAnyRole("ADMIN", "USER", "SELLER")
                         .requestMatchers("/api/products/**").hasAnyRole("ADMIN", "USER", "SELLER")
                         .requestMatchers("/api/reports/**").hasAnyRole("ADMIN", "USER", "SELLER")
                         .anyRequest().authenticated())

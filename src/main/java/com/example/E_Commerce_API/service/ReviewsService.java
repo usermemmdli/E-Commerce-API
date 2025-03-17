@@ -8,6 +8,7 @@ import com.example.E_Commerce_API.dao.repository.ReviewsRepository;
 import com.example.E_Commerce_API.dto.request.ReviewsRequest;
 import com.example.E_Commerce_API.dto.response.pagination.ReviewsPageResponse;
 import com.example.E_Commerce_API.dto.response.ReviewsResponse;
+import com.example.E_Commerce_API.exception.InvalidValueException;
 import com.example.E_Commerce_API.exception.ProductsNotFoundException;
 import com.example.E_Commerce_API.mapper.ReviewsMapper;
 import com.example.E_Commerce_API.security.AuthenticationHelperService;
@@ -48,7 +49,11 @@ public class ReviewsService {
             reviews.setProductsId(product.getId());
         }
         reviews.setDescription(reviewsRequest.getDescription());
-        reviews.setRating(reviewsRequest.getRating());
+        if (reviewsRequest.getRating() < 5 && reviewsRequest.getRating() > 0) {
+            reviews.setRating(reviewsRequest.getRating());
+        } else {
+            throw new InvalidValueException("Invalid rating value");
+        }
         reviews.setCreatedAt(Timestamp.from(Instant.now()));
         reviewsRepository.save(reviews);
     }

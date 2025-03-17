@@ -28,9 +28,10 @@ public class BookmarksService {
     private final ProductsMapper productsMapper;
     private final AuthenticationHelperService authenticationHelperService;
 
-    public BookmarksPageResponse showAllMarkedProducts(Users currentUser, int page, int count) {
+    public BookmarksPageResponse showAllMarkedProducts(String currentUserEmail, int page, int count) {
+        Users users = authenticationHelperService.getAuthenticatedUser(currentUserEmail);
         Pageable pageable = PageRequest.of(page, count);
-        Page<Bookmarks> bookmarks = bookmarksRepository.findByUsersId(currentUser.getId(), pageable);
+        Page<Bookmarks> bookmarks = bookmarksRepository.findByUsersId(users.getId(), pageable);
 
         List<ProductsResponse> productsList = bookmarks.getContent().stream()
                 .map(bookmark -> {

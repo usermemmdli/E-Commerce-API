@@ -21,7 +21,7 @@ public class CategoriesController {
     private final AuthenticationHelperService authenticationHelperService;
 
     @GetMapping("/show-all")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER', 'SELLER')")
     public ResponseEntity<List<CategoriesResponse>> getAllCategories() {
         String currentUserEmail = authenticationHelperService.getCurrentUserEmail();
         List<CategoriesResponse> categoriesResponses = categoriesService.getAllCategories(currentUserEmail);

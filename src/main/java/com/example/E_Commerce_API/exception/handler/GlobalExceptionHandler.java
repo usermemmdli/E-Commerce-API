@@ -12,84 +12,40 @@ import java.util.Map;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-    @ExceptionHandler(RoleNotFoundException.class)
-    public ResponseEntity<?> handleRoleNotFoundException(RoleNotFoundException e) {
-        Map<String, Object> body = new HashMap<>();
-        body.put("error", "Default role not found");
-        body.put("message", e.getMessage());
-        body.put("timestamp", LocalDateTime.now());
-        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
-    }
 
-    @ExceptionHandler(EmailAlreadyIsTakenException.class)
-    public ResponseEntity<?> handleEmailAlreadyIsTakenException(EmailAlreadyIsTakenException e) {
-        Map<String, Object> body = new HashMap<>();
-        body.put("error", "Email is already taken");
-        body.put("message", e.getMessage());
-        body.put("timestamp", LocalDateTime.now());
-        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
-    }
+    private static final Map<Class<? extends Exception>, HttpStatus> EXCEPTION_STATUS_MAP = Map.of(
+            RoleNotFoundException.class, HttpStatus.NOT_FOUND,
+            EmailAlreadyIsTakenException.class, HttpStatus.BAD_REQUEST,
+            InvalidEmailOrPasswordException.class, HttpStatus.BAD_REQUEST,
+            BookmarksNotFoundException.class, HttpStatus.NOT_FOUND,
+            CategoryNotFoundException.class, HttpStatus.NOT_FOUND,
+            ProductsNotFoundException.class, HttpStatus.NOT_FOUND,
+            ReportsNotFoundException.class, HttpStatus.NOT_FOUND,
+            InvalidPasswordException.class, HttpStatus.BAD_REQUEST,
+            InvalidUserEditRequestException.class, HttpStatus.BAD_REQUEST,
+            InvalidValueException.class, HttpStatus.BAD_REQUEST
+    );
 
-    @ExceptionHandler(InvalidEmailOrPasswordException.class)
-    public ResponseEntity<?> handleInvalidEmailOrPasswordException(InvalidEmailOrPasswordException e) {
-        Map<String, Object> body = new HashMap<>();
-        body.put("error", "Email or password is invalid");
-        body.put("message", e.getMessage());
-        body.put("timestamp", LocalDateTime.now());
-        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
-    }
+    @ExceptionHandler({
+            RoleNotFoundException.class,
+            EmailAlreadyIsTakenException.class,
+            InvalidEmailOrPasswordException.class,
+            BookmarksNotFoundException.class,
+            CategoryNotFoundException.class,
+            ProductsNotFoundException.class,
+            ReportsNotFoundException.class,
+            InvalidPasswordException.class,
+            InvalidUserEditRequestException.class,
+            InvalidValueException.class
+    })
+    public ResponseEntity<Map<String, Object>> handleCustomExceptions(Exception e) {
+        HttpStatus status = EXCEPTION_STATUS_MAP.getOrDefault(e.getClass(), HttpStatus.INTERNAL_SERVER_ERROR);
 
-    @ExceptionHandler(BookmarksNotFoundException.class)
-    public ResponseEntity<?> handleBookmarksNotFoundException(BookmarksNotFoundException e) {
         Map<String, Object> body = new HashMap<>();
-        body.put("error", "Bookmark not found");
+        body.put("status", status.value());
         body.put("message", e.getMessage());
         body.put("timestamp", LocalDateTime.now());
-        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
-    }
 
-    @ExceptionHandler(CategoryNotFoundException.class)
-    public ResponseEntity<?> handleCategoryNotFoundException(CategoryNotFoundException e) {
-        Map<String, Object> body = new HashMap<>();
-        body.put("error", "Category not found");
-        body.put("message", e.getMessage());
-        body.put("timestamp", LocalDateTime.now());
-        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(ProductsNotFoundException.class)
-    public ResponseEntity<?> handleProductsNotFoundException(ProductsNotFoundException e) {
-        Map<String, Object> body = new HashMap<>();
-        body.put("error", "Product not found");
-        body.put("message", e.getMessage());
-        body.put("timestamp", LocalDateTime.now());
-        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(ReportsNotFoundException.class)
-    public ResponseEntity<?> handleReportsNotFoundException(ReportsNotFoundException e) {
-        Map<String, Object> body = new HashMap<>();
-        body.put("error", "Report not found");
-        body.put("message", e.getMessage());
-        body.put("timestamp", LocalDateTime.now());
-        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(InvalidPasswordException.class)
-    public ResponseEntity<?> handleInvalidPasswordException(InvalidPasswordException e) {
-        Map<String, Object> body = new HashMap<>();
-        body.put("error", "Password does not match");
-        body.put("message", e.getMessage());
-        body.put("timestamp", LocalDateTime.now());
-        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler(InvalidUserEditRequestException.class)
-    public ResponseEntity<?> handleInvalidUserEditRequestException(InvalidUserEditRequestException e) {
-        Map<String, Object> body = new HashMap<>();
-        body.put("error", "Invalid user edit");
-        body.put("message", e.getMessage());
-        body.put("timestamp", LocalDateTime.now());
-        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(body, status);
     }
 }

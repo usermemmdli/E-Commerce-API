@@ -7,6 +7,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.sql.Timestamp;
+import java.util.Date;
 
 @Builder
 @Document(collection = "reports")
@@ -21,7 +22,7 @@ public class Reports {
     Long usersId;
     String productsId;
     String description;
-    Timestamp createdAt;
-    Timestamp updatedAt;
+    Date createdAt;
+    Date updatedAt;
     Boolean status;
 }

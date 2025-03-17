@@ -32,9 +32,7 @@ public class CategoriesService {
     public CategoriesResponse addCategories(String currentUserEmail, CategoriesRequest categoriesRequest) {
         Users users = authenticationHelperService.getAuthenticatedUser(currentUserEmail);
         Categories categories = new Categories();
-        if (categoriesRequest.getName() != null) {
-            categories.setName(categoriesRequest.getName());
-        }
+        categories.setName(categoriesRequest.getName());
         return CategoriesMapper.toCategoriesResponse(categoriesRepository.save(categories));
     }
 

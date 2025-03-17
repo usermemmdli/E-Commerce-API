@@ -6,7 +6,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.sql.Timestamp;
+import java.util.Date;
 
 @Builder
 @Document(collection = "reviews")
@@ -22,5 +22,5 @@ public class Reviews {
     String productsId;
     Integer rating;
     String description;
-    Timestamp createdAt;
+    Date createdAt;
 }
