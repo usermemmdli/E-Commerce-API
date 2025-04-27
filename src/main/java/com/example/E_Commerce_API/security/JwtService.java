@@ -50,12 +50,11 @@ public class JwtService {
 
     public boolean validateToken(String token) {
         try {
-            // Sadece token'ı parse edebiliyorsak geçerli kabul et
             Jwts.parserBuilder()
                     .setSigningKey(getSignKey())
                     .build()
                     .parseClaimsJws(token);
-            return true;  // Eğer exception fırlatılmadıysa token geçerlidir
+            return true;
         } catch (ExpiredJwtException e) {
             log.error("Token expired");
             return false;
@@ -80,7 +79,7 @@ public class JwtService {
                     .getExpiration()
                     .before(new Date());
         } catch (Exception e) {
-            return true;  // Herhangi bir hata durumunda token'ı expired kabul et
+            return true;
         }
     }
 

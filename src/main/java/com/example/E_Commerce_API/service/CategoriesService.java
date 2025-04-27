@@ -21,7 +21,7 @@ public class CategoriesService {
     private final AuthenticationHelperService authenticationHelperService;
 
     public List<CategoriesResponse> getAllCategories(String currentUserEmail) {
-        Users users = authenticationHelperService.getAuthenticatedUser(currentUserEmail);
+        authenticationHelperService.getAuthenticatedUser(currentUserEmail);
         List<Categories> getAllCategories = categoriesRepository.findAll();
         return getAllCategories
                 .stream()
@@ -30,14 +30,14 @@ public class CategoriesService {
     }
 
     public CategoriesResponse addCategories(String currentUserEmail, CategoriesRequest categoriesRequest) {
-        Users users = authenticationHelperService.getAuthenticatedUser(currentUserEmail);
+        authenticationHelperService.getAuthenticatedUser(currentUserEmail);
         Categories categories = new Categories();
         categories.setName(categoriesRequest.getName());
         return CategoriesMapper.toCategoriesResponse(categoriesRepository.save(categories));
     }
 
     public void deleteCategories(String currentUserEmail, String name) {
-        Users users = authenticationHelperService.getAuthenticatedUser(currentUserEmail);
+        authenticationHelperService.getAuthenticatedUser(currentUserEmail);
         if (name != null && categoriesRepository.existsByName(name)) {
             categoriesRepository.deleteByName(name);
         } else {

@@ -6,7 +6,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.sql.Timestamp;
+import java.util.Date;
 
 @Document(collection = "bookmarks")
 @Enabled
@@ -19,5 +19,5 @@ public class Bookmarks {
     String id;
     Long usersId;
     String productsId;
-    Timestamp createdAt;
+    Date createdAt;
 }

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 public interface BookmarksRepository extends MongoRepository<Bookmarks, String> {
     Page<Bookmarks> findByUsersId (Long usersId, Pageable pageable);
 
-    void deleteById(String id);
-
     boolean existsByUsersId(Long id);
+
+    void deleteByProductsId(String productId);
 }

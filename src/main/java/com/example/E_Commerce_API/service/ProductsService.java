@@ -35,7 +35,7 @@ public class ProductsService {
     private final AuthenticationHelperService authenticationHelperService;
 
     public ProductsPageResponse getAllProducts(String currentUserEmail, int page, int count) {
-        Users users = authenticationHelperService.getAuthenticatedUser(currentUserEmail);
+        authenticationHelperService.getAuthenticatedUser(currentUserEmail);
 
         Pageable pageable = PageRequest.of(page, count);
 
@@ -53,7 +53,7 @@ public class ProductsService {
     }
 
     public ProductsPageResponse getAllProductsByCategory(String currentUserEmail, String categoriesName, int page, int count) {
-        Users users = authenticationHelperService.getAuthenticatedUser(currentUserEmail);
+        authenticationHelperService.getAuthenticatedUser(currentUserEmail);
         Page<Products> allProductsByCategory = productsRepository.findByCategoriesName(categoriesName, PageRequest.of(page, count));
         List<ProductsResponse> productsList = allProductsByCategory.stream()
                 .map(productsMapper::toProductsResponse)
@@ -102,7 +102,7 @@ public class ProductsService {
     }
 
     public ProductsEditResponse editProduct(String currentUserEmail, ProductsEditRequest productsEditRequest) {
-        Users users = authenticationHelperService.getAuthenticatedUser(currentUserEmail);
+        authenticationHelperService.getAuthenticatedUser(currentUserEmail);
         Categories categories = categoriesRepository.findByName(productsEditRequest.getCategoriesName())
                 .orElseThrow(() -> new CategoryNotFoundException("No Category found"));
 

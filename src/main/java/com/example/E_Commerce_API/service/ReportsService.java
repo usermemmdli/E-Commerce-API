@@ -49,7 +49,7 @@ public class ReportsService {
     }
 
     public ReportsPageResponse getAllReports(String currentUserEmail, int page, int count) {
-        Users users = authenticationHelperService.getAuthenticatedUser(currentUserEmail);
+        authenticationHelperService.getAuthenticatedUser(currentUserEmail);
         Page<Reports> allReports = reportsRepository.findAll(PageRequest.of(page, count));
         List<ReportsResponse> reportsList = new CopyOnWriteArrayList<>(
                 allReports.getContent().stream()
@@ -65,7 +65,7 @@ public class ReportsService {
     }
 
     public ReportsStatusResponse setStatusReport(String currentUserEmail, ReportsStatusRequest reportsStatusRequest) {
-        Users users = authenticationHelperService.getAuthenticatedUser(currentUserEmail);
+        authenticationHelperService.getAuthenticatedUser(currentUserEmail);
         Reports reports = reportsRepository.findById(reportsStatusRequest.getId())
                 .orElseThrow(() -> new ReportsNotFoundException("Report not found"));
         reports.setStatus(reportsStatusRequest.getStatus());
@@ -75,7 +75,7 @@ public class ReportsService {
     }
 
     public void deleteReport(String currentUserEmail, String id) {
-        Users users = authenticationHelperService.getAuthenticatedUser(currentUserEmail);
+        authenticationHelperService.getAuthenticatedUser(currentUserEmail);
         if (reportsRepository.findById(id).isPresent()) {
             reportsRepository.deleteById(id);
         } else {

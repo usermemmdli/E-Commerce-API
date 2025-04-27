@@ -33,7 +33,7 @@ public class ReviewsService {
     private final AuthenticationHelperService authenticationHelperService;
 
     public ReviewsPageResponse showReviews(String currentUserEmail, int page, int count) {
-        Users users = authenticationHelperService.getAuthenticatedUser(currentUserEmail);
+        authenticationHelperService.getAuthenticatedUser(currentUserEmail);
         Page<Reviews> allReviews = reviewsRepository.findAll(PageRequest.of(page, count));
         List<ReviewsResponse> reviewsList = new CopyOnWriteArrayList<>(allReviews.getContent().stream().map(reviewsMapper::toReviewsResponse).toList());
         return new ReviewsPageResponse(reviewsList, allReviews.getTotalElements(), allReviews.getTotalPages(), allReviews.hasNext());

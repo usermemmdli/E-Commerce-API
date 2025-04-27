@@ -41,7 +41,6 @@ public class BookmarksService {
                 })
                 .collect(Collectors.toList());
 
-
         return new BookmarksPageResponse(
                 productsList,
                 bookmarks.getTotalElements(),
@@ -53,7 +52,7 @@ public class BookmarksService {
     public void deleteProductsMark(String currentUserEmail, String productId) {
         Users users = authenticationHelperService.getAuthenticatedUser(currentUserEmail);
         if (bookmarksRepository.existsByUsersId(users.getId())) {
-            bookmarksRepository.deleteById(productId);
+            bookmarksRepository.deleteByProductsId(productId);
         } else {
             throw new BookmarksNotFoundException("Bookmark not found");
         }
