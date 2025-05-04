@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -38,14 +39,21 @@ public class ReportsService {
         Users users = authenticationHelperService.getAuthenticatedUser(currentUserEmail);
         Reports reports = new Reports();
         reports.setUsersId(users.getId());
+        Products product = null;
         if (reportsRequest.getProductId() != null) {
-            Products product = productsRepository.findById(reportsRequest.getProductId())
+            product = productsRepository.findById(reportsRequest.getProductId())
                     .orElseThrow(() -> new ProductsNotFoundException("Product not found"));
-            reports.setProductsId(product.getId());
         }
         reports.setStatus(false);
         reports.setDescription(reportsRequest.getDescription());
-        reportsRepository.save(reports);
+        Reports savedReport = reportsRepository.save(reports);
+        if (product != null) {
+            if (product.getReportsId() == null) {
+                product.setReportsId(new ArrayList<>());
+            }
+            product.getReportsId().add(savedReport.getId());
+            productsRepository.save(product);
+        }
     }
 
     public ReportsPageResponse getAllReports(String currentUserEmail, int page, int count) {

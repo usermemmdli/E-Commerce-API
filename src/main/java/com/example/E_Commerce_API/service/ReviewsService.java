@@ -20,6 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -32,10 +34,13 @@ public class ReviewsService {
     private final ReviewsMapper reviewsMapper;
     private final AuthenticationHelperService authenticationHelperService;
 
-    public ReviewsPageResponse showReviews(String currentUserEmail, int page, int count) {
+    public ReviewsPageResponse showReviewsByProducts(String currentUserEmail, int page, int count, String productId) {
         authenticationHelperService.getAuthenticatedUser(currentUserEmail);
-        Page<Reviews> allReviews = reviewsRepository.findAll(PageRequest.of(page, count));
-        List<ReviewsResponse> reviewsList = new CopyOnWriteArrayList<>(allReviews.getContent().stream().map(reviewsMapper::toReviewsResponse).toList());
+        Page<Reviews> allReviews = reviewsRepository.findByProductsId(productId, PageRequest.of(page, count));
+        List<ReviewsResponse> reviewsList = new CopyOnWriteArrayList<>(allReviews.getContent()
+                .stream()
+                .map(reviewsMapper::toReviewsResponse)
+                .toList());
         return new ReviewsPageResponse(reviewsList, allReviews.getTotalElements(), allReviews.getTotalPages(), allReviews.hasNext());
     }
 
@@ -43,18 +48,28 @@ public class ReviewsService {
         Users users = authenticationHelperService.getAuthenticatedUser(currentUserEmail);
         Reviews reviews = new Reviews();
         reviews.setUsersId(users.getId());
+
+        Products product = null;
         if (reviewsRequest.getProductId() != null) {
-            Products product = productsRepository.findById(reviewsRequest.getProductId())
+            product = productsRepository.findById(reviewsRequest.getProductId())
                     .orElseThrow(() -> new ProductsNotFoundException("Product not found"));
             reviews.setProductsId(product.getId());
         }
         reviews.setDescription(reviewsRequest.getDescription());
-        if (reviewsRequest.getRating() < 5 && reviewsRequest.getRating() > 0) {
+        if (reviewsRequest.getRating() <= 5 && reviewsRequest.getRating() > 0) {
             reviews.setRating(reviewsRequest.getRating());
         } else {
             throw new InvalidValueException("Invalid rating value");
         }
         reviews.setCreatedAt(Timestamp.from(Instant.now()));
-        reviewsRepository.save(reviews);
+
+        Reviews savedReview = reviewsRepository.save(reviews);
+        if (product != null) {
+            if (product.getReviewsId() == null) {
+                product.setReviewsId(new ArrayList<>());
+            }
+            product.getReviewsId().add(savedReview.getId());
+            productsRepository.save(product);
+        }
     }
 }

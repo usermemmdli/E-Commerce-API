@@ -103,7 +103,7 @@ public class ProductsService {
 
     public ProductsEditResponse editProduct(String currentUserEmail, ProductsEditRequest productsEditRequest) {
         authenticationHelperService.getAuthenticatedUser(currentUserEmail);
-        Categories categories = categoriesRepository.findByName(productsEditRequest.getCategoriesName())
+        categoriesRepository.findByName(productsEditRequest.getCategoriesName())
                 .orElseThrow(() -> new CategoryNotFoundException("No Category found"));
 
         Products products = productsRepository.findById(productsEditRequest.getId())

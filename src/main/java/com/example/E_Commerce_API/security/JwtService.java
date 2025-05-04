@@ -17,7 +17,7 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class JwtService {
     private static final String SECRET_KEY = "ZFRoUWVsb3pjMGQ0TWtNM1pFWXhWbkUwVEcxT2IwVTRWSGxLZDFKaFZXdExha0ZwYjNKRFFraFNXRTlqYm5kdlNRPT0";
-    private static final long ACCESS_TOKEN_VALIDITY = 15 * 60 * 1000;
+    private static final long ACCESS_TOKEN_VALIDITY = 30 * 60 * 1000;
     private static final long REFRESH_TOKEN_VALIDITY = 7 * 24 * 60 * 60 * 1000;
 
     public String createAccessToken(Users users) {

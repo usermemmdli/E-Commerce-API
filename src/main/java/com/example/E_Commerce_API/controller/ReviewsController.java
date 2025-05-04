@@ -20,10 +20,11 @@ public class ReviewsController {
 
     @GetMapping("/show")
     @PreAuthorize("hasAnyRole('ADMIN','USER','SELLER')")
-    public ResponseEntity<ReviewsPageResponse> showReviews(@RequestParam(value = "page", defaultValue = "0") int page,
-                                                           @RequestParam(value = "count", defaultValue = "5") int count) {
+    public ResponseEntity<ReviewsPageResponse> showReviewsByProducts(@RequestParam(value = "page", defaultValue = "0") int page,
+                                                           @RequestParam(value = "count", defaultValue = "5") int count,
+                                                                     @RequestParam String productId) {
         String currentUserEmail = authenticationHelperService.getCurrentUserEmail();
-        ReviewsPageResponse reviewsPageResponse = reviewsService.showReviews(currentUserEmail, page, count);
+        ReviewsPageResponse reviewsPageResponse = reviewsService.showReviewsByProducts(currentUserEmail, page, count, productId);
         return ResponseEntity.ok(reviewsPageResponse);
     }
 

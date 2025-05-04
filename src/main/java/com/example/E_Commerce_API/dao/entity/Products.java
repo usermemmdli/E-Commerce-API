@@ -29,8 +29,8 @@ public class Products {
     Boolean status;
     String description;
     String categoriesName;
-    List<String> reviewsId = new ArrayList<>();
-    List<String> reportsId = new ArrayList<>();
+    List<String> reviewsId;
+    List<String> reportsId;
     Long usersId;
     Date createdAt;
     Date updatedAt;
