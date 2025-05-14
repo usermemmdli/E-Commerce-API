@@ -45,7 +45,7 @@ Handles product reports:
 
 ### **ReviewsService**
 Handles product reviews:
-- **showReviews**: Displays reviews for a specific product.
+- **showReviewsByProducts**: Displays reviews for a specific product.
 - **addReview**: Allows users to add a review to a product.
 
 ### **UsersService**
