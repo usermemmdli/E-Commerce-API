@@ -30,26 +30,19 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             log.debug("Extracted Token: {}", token);
 
             try {
-                // Token'dan kullanıcı adını çıkar
                 String username = jwtService.extractUsername(token);
                 log.debug("Extracted Username: {}", username);
 
-                // SecurityContext'te henüz authentication yok mu kontrol et
                 if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                    // Kullanıcı detaylarını yükle
                     UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
                     log.debug("User Authorities: {}", userDetails.getAuthorities());
 
-                    // Token geçerli mi kontrol et
                     if (jwtService.isTokenValid(token, userDetails)) {
-                        // Authentication nesnesi oluştur
                         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                                 userDetails, null, userDetails.getAuthorities());
 
-                        // Request detaylarını ekle
                         authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-                        // SecurityContext'e authentication'ı ayarla
                         SecurityContextHolder.getContext().setAuthentication(authToken);
                         log.debug("Authentication set in SecurityContext");
                     } else {
